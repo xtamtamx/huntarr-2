@@ -1,6 +1,8 @@
 # Huntarr-2
 
-A personal fork of Huntarr with security patches and customizations.
+A fork of Huntarr with security patches and customizations. I am not taking any credit here, just trying to help people use the thing still in a safe manner.
+
+Feel free to fork yourself.
 
 ## What is Huntarr?
 
