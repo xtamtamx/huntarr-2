@@ -65,22 +65,22 @@ jobs:
     - name: Build with PyInstaller
       run: |
         # Copy spec file from distribution directory to root
-        cp distribution/windows/huntarr.spec .
+        cp distribution/windows/huntarr-2.spec .
         
         # Use the dedicated build script from the distribution directory
         python -m pip install -r requirements.txt
         python -m pip install pywin32 setuptools
         
         # Build with apprise support (apprise data files are included in the spec file)
-        pyinstaller -y distribution/windows/huntarr.spec
+        pyinstaller -y distribution/windows/huntarr-2.spec
         
-        # Display contents of dist/Huntarr
-        dir dist/Huntarr
+        # Display contents of dist/Huntarr-2
+        dir dist/Huntarr-2
         
         # Verify frontend files were bundled (catch missing files early)
-        if (!(Test-Path "dist/Huntarr/_internal/frontend/templates/index.html")) {
+        if (!(Test-Path "dist/Huntarr-2/_internal/frontend/templates/index.html")) {
             Write-Host "WARNING: frontend/templates not found in _internal/, checking alternate locations..."
-            if (!(Test-Path "dist/Huntarr/_internal/templates/index.html")) {
+            if (!(Test-Path "dist/Huntarr-2/_internal/templates/index.html")) {
                 Write-Error "FATAL: Frontend templates missing from PyInstaller bundle!"
                 exit 1
             }
@@ -88,7 +88,7 @@ jobs:
         Write-Host "Frontend templates verified in bundle."
         
         # Verify system tray module is bundled
-        if (!(Test-Path "dist/Huntarr/_internal/resources/system_tray.py")) {
+        if (!(Test-Path "dist/Huntarr-2/_internal/resources/system_tray.py")) {
             Write-Error "FATAL: resources/system_tray.py missing from PyInstaller bundle!"
             exit 1
         }
@@ -117,7 +117,7 @@ jobs:
         $MakensisArgs = @(
             "/DVERSIONFILE=$AbsVersionFile",
             "/DPROJECT_ROOT=$($PWD.Path)",
-            "distribution\windows\installer\huntarr_installer.nsi"
+            "distribution\windows\installer\huntarr-2_installer.nsi"
         )
         
         # Run NSIS compiler
@@ -126,11 +126,11 @@ jobs:
         
         # Check if installer was created
         $version = (Get-Content version.txt).Trim()
-        $installerPath = "distribution\windows\installer\installer\Huntarr-${version}-win.exe"
+        $installerPath = "distribution\windows\installer\installer\Huntarr-2-${version}-win.exe"
         if (Test-Path $installerPath) {
             Write-Host "Installer created successfully at $installerPath"
             # Copy to expected upload location
-            Copy-Item -Path $installerPath -Destination "installer\Huntarr-${version}-win.exe" -Force
+            Copy-Item -Path $installerPath -Destination "installer\Huntarr-2-${version}-win.exe" -Force
         } else {
             Write-Error "Installer was not created. Check the logs above for errors."
             exit 1
@@ -142,13 +142,13 @@ jobs:
     - name: Upload installer
       uses: actions/upload-artifact@v4
       with:
-        name: huntarr-installer
-        path: installer/Huntarr-*-win.exe
+        name: huntarr-2-installer
+        path: installer/Huntarr-2-*-win.exe
         
     - name: Upload to release
       if: steps.meta.outputs.IS_TAG == 'true'
       uses: softprops/action-gh-release@v1
       with:
-        files: installer/Huntarr-*-win.exe
+        files: installer/Huntarr-2-*-win.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
