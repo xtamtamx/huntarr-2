@@ -10,3 +10,4 @@ app_launcher.py
 app_icon.icns
 icon.iconset/
 hooks/
+.DS_Store
