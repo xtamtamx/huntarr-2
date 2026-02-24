@@ -5,7 +5,8 @@ build/
 dist/
 *.dmg
 *.pkg
-*.spec
+# Ignore generated spec files in root, but not distribution/
+/*.spec
 app_launcher.py
 app_icon.icns
 icon.iconset/
