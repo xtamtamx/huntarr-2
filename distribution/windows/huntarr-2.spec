@@ -32,7 +32,7 @@ except ImportError:
     print("Warning: apprise not found, skipping apprise data files")
 
 a = Analysis(
-    ['main.py'],
+    ['src/app_launcher.py'],
     pathex=['.'],
     binaries=[],
     datas=datas,
@@ -50,6 +50,8 @@ a = Analysis(
         'main',
         'pystray',
         'PIL.Image',
+        'src.primary.desktop_tray',
+        'src.primary.utils.api_helpers',
         'apprise',
         'apprise.common',
         'apprise.conversion',

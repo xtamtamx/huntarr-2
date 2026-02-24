@@ -1,76 +1,35 @@
 """
-Windows System Tray Icon for Huntarr-2
+Windows System Tray for Huntarr-2
+Backwards-compatible wrapper around unified desktop_tray module.
 """
-import os
 import sys
-import webbrowser
-import threading
+import os
 
-try:
-    import pystray
-    from PIL import Image
-    TRAY_AVAILABLE = True
-except ImportError:
-    TRAY_AVAILABLE = False
+# Add parent to path for imports when running standalone
+if __name__ == '__main__':
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from src.primary.desktop_tray import run_tray, create_tray, is_available, open_browser
+
+# Re-export for backwards compatibility
+__all__ = ['run_tray', 'create_tray', 'is_available', 'open_browser']
 
 
 def get_icon_path():
-    """Get the path to the icon file."""
-    if hasattr(sys, '_MEIPASS'):
-        # Running as PyInstaller bundle
-        return os.path.join(sys._MEIPASS, 'frontend', 'static', 'logo', 'huntarr.ico')
-    else:
-        # Running from source
-        return os.path.join(os.path.dirname(__file__), '..', 'frontend', 'static', 'logo', 'huntarr.ico')
-
-
-def open_browser():
-    """Open Huntarr in browser."""
-    webbrowser.open('http://127.0.0.1:9705')
+    """Backwards-compatible alias."""
+    from src.primary.desktop_tray import get_icon_path as _get_icon_path
+    return _get_icon_path()
 
 
 def quit_app(icon):
-    """Quit the application."""
+    """Backwards-compatible alias."""
     icon.stop()
     os._exit(0)
 
 
 def create_tray_icon(stop_event=None):
-    """Create and run the system tray icon."""
-    if not TRAY_AVAILABLE:
-        print("System tray not available (pystray/PIL not installed)")
-        return None
-    
-    icon_path = get_icon_path()
-    
-    try:
-        image = Image.open(icon_path)
-    except Exception as e:
-        print(f"Could not load icon: {e}")
-        # Create a simple colored icon as fallback
-        image = Image.new('RGB', (64, 64), color=(66, 133, 244))
-    
-    menu = pystray.Menu(
-        pystray.MenuItem('Open Huntarr-2', lambda: open_browser(), default=True),
-        pystray.Menu.SEPARATOR,
-        pystray.MenuItem('Quit', quit_app)
-    )
-    
-    icon = pystray.Icon(
-        'Huntarr-2',
-        image,
-        'Huntarr-2',
-        menu
-    )
-    
-    return icon
-
-
-def run_tray():
-    """Run the system tray in a separate thread."""
-    icon = create_tray_icon()
-    if icon:
-        icon.run()
+    """Backwards-compatible alias."""
+    return create_tray()
 
 
 if __name__ == '__main__':
