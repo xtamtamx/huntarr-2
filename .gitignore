@@ -1,0 +1,12 @@
+
+# Build artifacts
+.venv-build/
+build/
+dist/
+*.dmg
+*.pkg
+*.spec
+app_launcher.py
+app_icon.icns
+icon.iconset/
+hooks/
